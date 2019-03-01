@@ -85,10 +85,17 @@ controller.on('bot_channel_join', function (bot, message) {
     bot.reply(message, "I'm here!")
 });
 
-controller.hears('hello', 'direct_message', function (bot, message) {
-    bot.reply(message, 'Hello!');
-});
+controller.hears(['hello', 'hi', 'greetings'], ['direct_mention', 'mention', 'direct_message'], function(bot,message) {
+     bot.reply(message, 'Hello!');
+ });
 
+controller.hears(['snackbot add'], ['direct_mention', 'mention', 'direct_message'], function(bot,message) {
+     bot.reply(message, 'Ok adding your snacks to the list');
+ });
+
+controller.hears(['share repo'], ['direct_mention', 'mention', 'direct_message'], function(bot,message) {
+     bot.reply(message, 'https://github.com/rayen-rose-digital/easy-peasy-bot');
+ });
 
 /**
  * AN example of what could be:
