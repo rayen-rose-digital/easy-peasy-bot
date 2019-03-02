@@ -86,16 +86,56 @@ controller.on('bot_channel_join', function (bot, message) {
 });
 
 controller.hears(['hello', 'hi', 'greetings'], ['direct_mention', 'mention', 'direct_message'], function(bot,message) {
-     bot.reply(message, 'Hello!');
+     bot.reply(message, 'Hello!, I am the snack god');
  });
 
-controller.hears(['snackbot add'], ['direct_mention', 'mention', 'direct_message'], function(bot,message) {
-     bot.reply(message, 'Ok adding your snacks to the list');
- });
 
-controller.hears(['share repo'], ['direct_mention', 'mention', 'direct_message'], function(bot,message) {
-     bot.reply(message, 'https://github.com/rayen-rose-digital/easy-peasy-bot');
- });
+controller.hears(['snackbot add'], ['direct_mention', 'mention', 'direct_message', 'message_received'], function(bot,message) {
+
+  // start a conversation to handle this response.
+  bot.startConversation(message,function(err,convo) {
+
+    convo.addQuestion('What snack?',[
+      {
+        pattern: 'done',
+        callback: function(response,convo) {
+          convo.say('OK adding to list');
+          convo.next();
+        }
+      },
+      {
+        pattern: bot.utterances.yes,
+        callback: function(response,convo) {
+          convo.say('what snack?');
+          // do something else...
+          convo.next();
+
+        }
+      },
+      {
+        pattern: bot.utterances.no,
+        callback: function(response,convo) {
+          convo.say('Ok will send list to Evan Rose');
+          // do something else...
+          convo.next();
+        }
+      },
+      {
+        default: true,
+        callback: function(response,convo) {
+          // just repeat the question
+          convo.say('added your snack to list');
+          convo.say('Add another?');
+          convo.next();
+        }
+      }
+    ],{},'default');
+
+  })
+
+});
+
+
 
 /**
  * AN example of what could be:
